@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075da5">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>KARTSET – Réglages Mini 60</title>
+<style>
+  :root {
+    --otk-green: #0876c9;
+    --otk-dark: #071426;
+    --otk-panel: #10243b;
+    --otk-border: #294765;
+    --otk-text: #f8fafc;
+    --otk-muted: #94a3b8;
+    --otk-accent: #f5c400;
+    --otk-warn: #f59e0b;
+    --otk-danger: #ef4444;
+    --otk-info: #38bdf8;
+  }
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { margin: 0; background: var(--otk-dark); color: var(--otk-text); line-height: 1.5; }
+  header {
+    background: linear-gradient(112deg, #06172b 0%, #075da5 58%, #09213a 100%);
+    border-bottom: 4px solid #f5c400; box-shadow: 0 5px 22px rgba(0,0,0,.28);
+    padding: 1rem 1.5rem;
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;
+  }
+  header h1 { margin: 0; font-size: 1.35rem; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.6rem; }
+  .badge { background: var(--otk-green); color: #fff; font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 700; text-transform: uppercase; }
+  nav {
+    display: flex; gap: 0.4rem; background: #090d16; padding: 0.5rem 1.5rem; overflow-x: auto; border-bottom: 1px solid var(--otk-border);
+  }
+  nav button {
+    background: transparent; color: var(--otk-muted); border: 1px solid transparent;
+    padding: 0.55rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; white-space: nowrap; transition: all 0.15s;
+  }
+  nav button:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  nav button.active { background: var(--otk-green); color: #fff; border-color:#f5c400; box-shadow: inset 0 -2px 0 #f5c400; }
+  main { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+  .card {
+    background: var(--otk-panel); border: 1px solid var(--otk-border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem;
+  }
+  .card h2, .card h3 { margin-top: 0; color: #fff; border-bottom: 1px solid var(--otk-border); padding-bottom: 0.5rem; font-size: 1.1rem; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.9rem; }
+  label { display: block; font-size: 0.8rem; color: var(--otk-muted); margin-bottom: 0.25rem; font-weight: 600; }
+  input, select, textarea {
+    width: 100%; background: #0f172a; color: #fff; border: 1px solid var(--otk-border);
+    border-radius: 6px; padding: 0.55rem 0.7rem; font-size: 0.92rem;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--otk-accent); }
+  .btn {
+    background: var(--otk-green); color: #fff; border: none; padding: 0.6rem 1.1rem;
+    border-radius: 6px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn-secondary { background: #334155; }
+  .btn-warn { background: var(--otk-warn); color: #000; }
+  .btn-danger { background: var(--otk-danger); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { border: 1px solid var(--otk-border); padding: 0.65rem 0.75rem; text-align: left; vertical-align: top; }
+  th { background: #0f172a; color: var(--otk-accent); font-weight: 700; }
+  tr:nth-child(even) td { background: rgba(15, 23, 42, 0.45); }
+  .pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
+  .pill-green { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+  .pill-warn { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+  .pill-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+  .pill-info { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+  .alert-box {
+    background: rgba(56, 189, 248, 0.1); border-left: 4px solid var(--otk-info);
+    padding: 0.85rem 1rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.9rem;
+  }
+  .alert-warn {
+    background: rgba(245, 158, 11, 0.12); border-left: 4px solid var(--otk-warn);
+  }
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+  .filter-btn {
+    background: #0f172a; color: var(--otk-text); border: 1px solid var(--otk-border);
+    padding: 0.4rem 0.8rem; border-radius: 999px; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+  }
+  .filter-btn.active { background: var(--otk-green); border-color: var(--otk-green); color: #fff; }
+  .setup-item {
+    display: flex; justify-content: space-between; align-items: center; padding: 0.75rem;
+    background: #0f172a; border: 1px solid var(--otk-border); border-radius: 8px; margin-bottom: 0.5rem;
+  }
+  .eccentric-panel { grid-column: 1 / -1; background:#0f172a; border:1px solid var(--otk-border); border-radius:8px; padding:0.9rem; }
+  .eccentric-help { color:var(--otk-muted); font-size:0.86rem; margin:0.25rem 0 0.8rem; }
+  .eccentric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.8rem; }
+  .eccentric-layout { display:grid; gap:.65rem; }
+  .eccentric-front { display:flex; align-items:center; justify-content:center; gap:.55rem; color:#e2e8f0; font-weight:800; letter-spacing:.06em; }
+  .front-arrow { color:#22c55e; font-size:2.1rem; line-height:1; }
+  .eccentric-row { display:grid; grid-template-columns:1fr; align-items:center; background:#172235; border:1px solid var(--otk-border); border-radius:8px; padding:.6rem; }
+  .eccentric-row-title { text-align:center; font-weight:800; font-size:.9rem; color:#cbd5e1; letter-spacing:.04em; }
+  .eccentric-pair-graphic { width:100%; max-width:520px; margin:.2rem auto; }
+  .eccentric-pair-graphic svg { display:block; width:100%; height:auto; }
+  .eccentric-pair-graphic [data-position] { cursor:pointer; }
+  @media (min-width:600px) { .eccentric-row { grid-template-columns:1fr 2fr 1fr; gap:.6rem; } .eccentric-row-title { text-align:left; } }
+  .eccentric-card { background:#172235; border:1px solid var(--otk-border); border-radius:8px; padding:0.75rem; text-align:center; }
+  .eccentric-graphic { width:100%; max-width:230px; margin:0.25rem auto; }
+  .eccentric-graphic svg { display:block; width:100%; height:auto; }
+  .eccentric-hole { cursor:pointer; fill:#64748b; stroke:#cbd5e1; stroke-width:1.5; }
+  .eccentric-hole.selected { fill:#22c55e; stroke:#dcfce7; stroke-width:2.5; }
+  .eccentric-controls { display:flex; justify-content:center; align-items:center; gap:0.8rem; margin-top:0.35rem; }
+  .eccentric-controls .btn { padding:0.35rem 0.8rem; }
+  .eccentric-summary { margin:0.8rem 0; padding:0.7rem; border:1px solid rgba(34,197,94,.45); border-radius:6px; color:#86efac; text-align:center; font-weight:700; }
+  .eccentric-result { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:.65rem; margin-top:.65rem; }
+  .eccentric-result > div { background:#172235; border:1px solid var(--otk-border); border-radius:7px; padding:.65rem; text-align:center; }
+  .eccentric-result strong { display:block; color:#fff; font-size:1.02rem; }
+  .eccentric-result small { color:var(--otk-muted); }
+  .eccentric-legend { display:flex; flex-wrap:wrap; gap:.4rem .8rem; color:var(--otk-muted); font-size:.78rem; margin-top:.5rem; }
+  .eccentric-legend span { white-space:nowrap; }
+  .eccentric-note { background:rgba(245,158,11,.10); border-left:3px solid var(--otk-warn); padding:.65rem .8rem; border-radius:5px; font-size:.82rem; color:#fcd38d; margin-top:.7rem; }
+  .eccentric-card .btn { min-width:38px; }
+  .eccentric-card svg text { user-select:none; }
+  @media print {
+    body { background: #fff; color: #000; }
+    nav, .no-print { display: none !important; }
+    .card { border: 1px solid #ccc; background: #fff; color: #000; break-inside: avoid; }
+    th { background: #eee !important; color: #000 !important; }
+    td { color: #000 !important; }
+    .tab { display: block !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🏁 OTK Mini 60 Setup Manager <span class="badge">Rookie EVM • Noesis R</span></h1>
+    <div style="font-size:0.8rem; color:var(--otk-muted); margin-top:0.2rem;">V14 · Rookie Mini EVM 2024 · Manuel OTK adapté au Mini 60 (arbres Ø30 U/N/O/H/A)</div>
+  </div>
+  <div class="no-print" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+    <button class="btn btn-secondary" onclick="loadDryBase()">☀️ Charger Base Sec OTK</button>
+    <button class="btn btn-secondary" onclick="loadWetBase()">🌧️ Charger Base Pluie OTK</button>
+    <button class="btn" onclick="window.print()">🖨️ Imprimer / PDF</button>
+  </div>
+</header>
+
+<nav class="no-print">
+  <button class="active" onclick="switchTab('tab-fiche', this)">📋 Fiche Setup & Météo</button>
+  <button onclick="switchTab('tab-diag', this)">🔧 Diagnostic & Symptômes</button>
+  <button onclick="switchTab('tab-tableau', this)">📊 Tableau Officiel OTK (Sens de réglage)</button>
+  <button onclick="switchTab('tab-ref', this)">📘 Référentiel Manuel OTK (Baquet, Jantes, Lest, Arbres)</button>
+  <button onclick="switchTab('tab-sniper', this)">🎯 Sniper V2 · Carrossage en degrés</button>
+  <button onclick="switchTab('tab-saved', this)">💾 Fiches Sauvegardées (<span id="saved-count">0</span>)</button>
+</nav>
+
+<main>
+
+  <!-- TAB 1: FICHE SETUP -->
+  <div id="tab-fiche" class="tab active">
+    <div class="card">
+      <h2>1. Circuit, Session & Météo Automatique</h2>
+      <div class="grid-3">
+        <div>
+          <label>Circuit / Piste</label>
+          <input type="text" id="trackName" placeholder="Ex: Salbris, Angerville, Le Mans...">
+        </div>
+        <div>
+          <label>Date & Session</label>
+          <input type="text" id="sessionName" placeholder="Ex: Essais libres 2 / Finale">
+        </div>
+        <div>
+          <label>État de piste / Grip</label>
+          <select id="trackGrip">
+            <option value="low">Piste verte / froide / glissante (Faible grip)</option>
+            <option value="medium" selected>Piste normale / grip moyen</option>
+            <option value="high">Piste très gommée / forte chaleur (Haut grip)</option>
+            <option value="greasy">Piste grasse (faible adhérence, dépôt / gomme froide)</option>
+            <option value="damp">Faiblement mouillée (film d’eau léger)</option>
+            <option value="wet">Piste mouillée / pluie</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:0.9rem;">
+        <div>
+          <label>Date de la fiche</label>
+          <input type="date" id="setupDate">
+        </div>
+        <div>
+          <label>Heure de la fiche</label>
+          <input type="time" id="setupTime">
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <small style="color:var(--otk-muted);">Date et heure préremplies automatiquement à l’ouverture. Vous pouvez les modifier avant l’enregistrement.</small>
+        </div>
+      </div>
+
+      <div style="margin-top:0.9rem; display:flex; gap:0.6rem; flex-wrap:wrap; align-items:flex-end;">
+        <div style="flex:1; min-width:200px;">
+          <label>Ville du circuit (pour météo auto)</label>
+          <input type="text" id="weatherCity" placeholder="Ex: Salbris">
+        </div>
+        <button class="btn" type="button" onclick="fetchWeather()">🌦️ Météo Auto en ligne</button>
+      </div>
+
+      <div class="grid-3" style="margin-top:0.9rem;">
+        <div>
+          <label>Température Air (°C)</label>
+          <input type="number" step="0.5" id="tempAir" placeholder="22">
+        </div>
+        <div>
+          <label>Humidité (%) / Pression (hPa)</label>
+          <input type="text" id="humidityPress" placeholder="55% / 1015 hPa">
+        </div>
+        <div>
+          <label>Conditions Météo</label>
+          <input type="text" id="weatherDesc" placeholder="Ensoleillé, sec">
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- TRAIN AVANT -->
+      <div class="card">
+        <h2>2. Train Avant (Front End - Manuel OTK §3)</h2>
+        <div class="grid-2">
+          <div>
+            <label>Bagues intérieures AV (par côté)</label>
+            <input type="number" id="frontWidth" min="0" step="0.5" value="1" inputmode="decimal">
+            <small style="color:var(--otk-muted);">Pas de 0,5 : 0 / 0,5 / 1 / 1,5 / 2… Saisir la même valeur à gauche et à droite.</small>
+          </div>
+          <div>
+            <label>Moyeux Avant</label>
+            <select id="frontHubs">
+              <option value="Standard Mini (65mm)" selected>Standard Mini (65 mm)</option>
+              <option value="Longs (75/80mm)">Longs (75 / 80 mm)</option>
+            </select>
+          </div>
+          <div>
+            <label>Hauteur de châssis AV (bagues de fusée)</label>
+            <select id="frontHeight">
+              <option value="Basse (2 bagues en haut)">Basse (2 bagues au-dessus)</option>
+              <option value="Standard / Milieu (1 haut / 1 bas)" selected>Milieu Standard (1 haut / 1 bas)</option>
+              <option value="Haute (2 bagues en bas)">Haute (2 bagues en dessous)</option>
+            </select>
+          </div>
+          <div>
+            <label>Barre Stabilisatrice AV (Torsion Bar)</label>
+            <select id="frontBar">
+              <option value="Sans barre (retirée)">Sans barre (retirée - max souplesse)</option>
+              <option value="Ronde Chrome (Souple)">Ronde Chrome (Souple)</option>
+              <option value="Ronde Silver (Medium)">Ronde Silver (Medium)</option>
+              <option value="Ronde Gold/Brown (Dure / Pluie)">Ronde Gold / Brown (Dure / Pluie)</option>
+              <option value="Plate Horizontale (Standard OTK)" selected>Plate Horizontale (Standard OTK)</option>
+              <option value="Plate Verticale (Très dure)">Plate Verticale (Très dure)</option>
+            </select>
+          </div>
+          <div class="eccentric-panel">
+            <label>Excentriques de réglage — chasse et carrossage liés</label>
+            <p class="eccentric-help">V13 : modèle géométrique des Pills ROA. Excentricité 2 mm, 20 positions (18° par trou), entraxe des pivots supposé vertical de 60 mm. Le trou du pivot est à 180° de la flèche gravée. À gauche et à droite, on utilise la même position standard (même index de trou). En revanche, comme les montages sont en miroir, une action « + » fait tourner visuellement le Pill gauche dans le sens horaire et le Pill droit dans le sens antihoraire.</p>
+            <div class="eccentric-layout">
+              <div class="eccentric-front"><span class="front-arrow">↑</span><strong>AVANT DU KART</strong></div>
+              <div class="eccentric-row">
+                <div class="eccentric-row-title">EXCENTRIQUES SUPÉRIEURS</div>
+                <div id="eccentricTopGraphic" class="eccentric-pair-graphic"></div>
+                <div class="eccentric-controls">
+                  <button type="button" class="btn btn-secondary" onclick="rotateEccentric('top',-1)">−</button>
+                  <span>Position <b id="eccentricTopValue">1 / 20</b></span>
+                  <button type="button" class="btn btn-secondary" onclick="rotateEccentric('top',1)">+</button>
+                </div>
+              </div>
+              <div class="eccentric-row">
+                <div class="eccentric-row-title">EXCENTRIQUES INFÉRIEURS</div>
+                <div id="eccentricBottomGraphic" class="eccentric-pair-graphic"></div>
+                <div class="eccentric-controls">
+                  <button type="button" class="btn btn-secondary" onclick="rotateEccentric('bottom',-1)">−</button>
+                  <span>Position <b id="eccentricBottomValue">1 / 20</b></span>
+                  <button type="button" class="btn btn-secondary" onclick="rotateEccentric('bottom',1)">+</button>
+                </div>
+              </div>
+              <div class="eccentric-controls" style="justify-content:center;flex-wrap:wrap;margin:.5rem 0;">
+                <button type="button" class="btn btn-secondary" onclick="rotateEccentricPair(-1)">Paire − (haut − / bas +)</button>
+                <button type="button" class="btn btn-secondary" onclick="rotateEccentricPair(1)">Paire + (haut + / bas −)</button>
+              </div>
+            </div>
+            <div class="eccentric-summary" id="eccentricSummary">Position neutre de référence</div>
+            <div class="eccentric-result">
+              <div><small>Delta de chasse</small><strong id="casterQual">0,00°</strong><small id="casterMm">0,00 mm longitudinal</small></div>
+              <div><small>Delta de carrossage</small><strong id="camberQual">0,00°</strong><small id="camberMm">0,00 mm transversal</small></div>
+              <div><small>Déplacement pivot supérieur</small><strong id="topAngle">0,00 / 0,00 mm</strong><small>longitudinal / transversal</small></div>
+              <div><small>Déplacement pivot inférieur</small><strong id="bottomAngle">0,00 / 0,00 mm</strong><small>longitudinal / transversal</small></div>
+            </div>
+            <div class="eccentric-note"><strong>Référence neutre utilisée :</strong> les Pills supérieur et inférieur sont initialisés sur le même index (position 1), avec leurs flèches orientées vers l’avant. Les côtés gauche et droit gardent toujours le même index de position standard. Lorsqu'on clique sur « + », le dessin de gauche tourne dans le sens horaire tandis que celui de droite tourne dans le sens antihoraire ; avec « − », les sens sont inversés. C'est le même réglage mécanique, représenté en miroir, et non deux réglages différents. Le bouton « Paire » fait ensuite tourner les deux Pills en sens opposés pour modifier le réglage.</div>
+            <div class="eccentric-note"><strong>Modèle théorique :</strong> chaque pivot est décalé de 2 mm par rapport au centre de son excentrique. Le calcul compare les déplacements des deux pivots à la position neutre, puis divise leur différence par 60 mm pour estimer l'inclinaison de l'axe. Le signe chasse/carrossage indique ici le sens géométrique selon le repère du dessin ; à valider sur le kart.</div>
+            <small style="color:var(--otk-muted);">Les valeurs affichées sont des variations par rapport au neutre, pas des valeurs absolues de chasse ou de carrossage. Le modèle suppose l'entraxe de 60 mm vertical et ne tient pas compte de l'inclinaison initiale réelle des pivots, des tolérances ni des déformations.</small>
+            <h4 style="margin:.9rem 0 .35rem;color:#e2e8f0;">Paramètres géométriques utilisés</h4>
+            <p style="color:var(--otk-muted);font-size:.82rem;margin:.4rem 0 0;">Excentricité : 2,00 mm · amplitude pivot à pivot diamétralement opposée : 4,00 mm · 20 positions espacées de 18° · entraxe supposé : 60,00 mm.</p>
+            <input type="hidden" id="caster" value="0">
+            <input type="hidden" id="camber" value="0">
+          </div>
+          <div>
+            <label>Ouverture / Pincement (Toe)</label>
+            <select id="toe">
+              <option value="0 mm (Neutre)">0 mm (Neutre)</option>
+              <option value="1 à 2 mm ouverture (Standard Sec)" selected>1 à 2 mm ouverture (Standard Sec)</option>
+              <option value="3 à 4 mm ouverture">3 à 4 mm ouverture</option>
+              <option value="5 à 8 mm ouverture (Pluie OTK)">5 à 8 mm ouverture (Pluie OTK)</option>
+            </select>
+          </div>
+          <div>
+            <label>Colonne de direction (Biellettes)</label>
+            <select id="steeringCol">
+              <option value="Trous proches colonne (direction souple/moins vive)" selected>Trous proches colonne (souple / progressif)</option>
+              <option value="Trous éloignés colonne (direction vive/lourde)">Trous éloignés colonne (plus direct / lourd)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRAIN ARRIERE -->
+      <div class="card">
+        <h2>3. Train Arrière (Rear End Mini 60 - Manuel OTK §2)</h2>
+        <div class="grid-2">
+          <div>
+            <label>Arbre Arrière Mini 60 (Ø 30 × 950 mm)</label>
+            <select id="rearAxle">
+              <option value="Type U (Souple - Pluie / Froid / Léger)">Type U (Souple - Pluie / Froid)</option>
+              <option value="Type N (Medium Standard OTK)" selected>Type N (Medium Standard OTK)</option>
+              <option value="Type O (Medium-Dur)">Type O (Medium-Dur)</option>
+              <option value="Type H (Dur)">Type H (Dur)</option>
+              <option value="Type A (Extra-Dur)">Type A (Extra-Dur)</option>
+            </select>
+          </div>
+          <div>
+            <label>Largeur Voie Arrière (Max Mini 1100 mm)</label>
+            <input type="text" id="rearWidth" value="1090 mm" placeholder="Ex: 1090 mm (Sec) / 1060 mm (Pluie)">
+          </div>
+          <div>
+            <label>Moyeux Arrière (Ø 30 mm)</label>
+            <select id="rearHubs">
+              <option value="Courts Aluminium">Courts Aluminium</option>
+              <option value="Standard Magnésium" selected>Standard Magnésium</option>
+              <option value="Longs Magnésium">Longs Magnésium</option>
+            </select>
+          </div>
+          <div>
+            <label>Hauteur de châssis AR (Paliers)</label>
+            <select id="rearHeight">
+              <option value="Châssis haut (arbre bas)">Châssis haut (arbre position basse)</option>
+              <option value="Standard Milieu" selected>Standard Milieu</option>
+              <option value="Châssis bas (arbre haut - plus de motricité)">Châssis bas (arbre position haute)</option>
+            </select>
+          </div>
+          <div>
+            <label>Barre Stabilisatrice AR</label>
+            <select id="rearBar">
+              <option value="Sans barre AR (Standard OTK)" selected>Sans barre AR (Standard OTK)</option>
+              <option value="Barre AR montée">Barre AR montée</option>
+            </select>
+          </div>
+          <div>
+            <label>Raidisseurs de Baquet (Seat Stays)</label>
+            <select id="seatStays">
+              <option value="0 raidisseur (libre)">0 raidisseur (arrière libre)</option>
+              <option value="1 raidisseur de chaque côté (Standard OTK)" selected>1 raidisseur / côté (Standard OTK)</option>
+              <option value="2 raidisseurs / côté (max grip AR)">2 raidisseurs / côté (max grip AR)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PNEUS, JANTES, LEST, MOTEUR -->
+    <div class="card">
+      <h2>4. Jantes, Pneumatiques, Lest & Moteur Mini 60</h2>
+      <div class="grid-3">
+        <div>
+          <label>Jantes OTK (Manuel §4)</label>
+          <select id="wheels">
+            <option value="MXP Magnésium (Standard Sec)" selected>MXP Magnésium (Standard Sec)</option>
+            <option value="MXC Magnésium (Piste gommée / Long run)">MXC Magnésium (Piste gommée / Long run)</option>
+            <option value="AXP Aluminium (Pluie / Chauffe rapide)">AXP Aluminium (Pluie / Chauffe rapide)</option>
+          </select>
+        </div>
+        <div>
+          <label>Pneus & Pressions à Froid (AV / AR)</label>
+          <input type="text" id="tyreCold" placeholder="Ex: Vega Mini - 0.85 / 0.85 bar">
+        </div>
+        <div>
+          <label>Pressions à Chaud & Temps au tour</label>
+          <input type="text" id="tyreHotLap" placeholder="Ex: 1.05 / 1.05 bar — 54.32s">
+        </div>
+        <div>
+          <label>Position Baquet & Lest (Manuel §1 & §5)</label>
+          <input type="text" id="seatBallast" placeholder="Ex: Baquet Std + 3kg gauche + 2kg dos">
+        </div>
+        <div>
+          <label>Transmission (Pignon / Couronne)</label>
+          <input type="text" id="gearing" placeholder="Ex: 11 x 76">
+        </div>
+        <div>
+          <label>Carburateur (Gicleur / Aiguille / Vis air)</label>
+          <input type="text" id="carbSetup" placeholder="Ex: GP 108 / W23 2e cran / 1.5 tr">
+        </div>
+      </div>
+      <div style="margin-top:0.9rem;">
+        <label>Commentaires pilote & sensations en piste</label>
+        <textarea id="notes" rows="2" placeholder="Ex: Sous-vire à l'entrée de l'épingle, arrière sautille en sortie..."></textarea>
+      </div>
+      <div class="no-print" style="margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
+        <button class="btn" onclick="saveSetup()">💾 Enregistrer cette fiche</button>
+        <button class="btn btn-secondary" onclick="exportJSON()">📤 Exporter sauvegarde (.json)</button>
+        <label class="btn btn-secondary" style="margin:0; cursor:pointer;">
+          📥 Importer (.json) <input type="file" accept=".json" style="display:none;" onchange="importJSON(event)">
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: DIAGNOSTIC INTERACTIF -->
+  <div id="tab-diag" class="tab">
+    <div class="card">
+      <h2>🔧 Assistant Diagnostic OTK Mini 60 (Basé sur le Manuel Officiel OTK)</h2>
+      <div class="alert-box">
+        <strong>Règle d'or du manuel OTK :</strong> Toujours partir du réglage standard usine. Ne modifiez <strong>qu'un seul paramètre à la fois</strong> lors des essais, et si vous êtes perdu, revenez au réglage de base.
+      </div>
+      <div class="grid-2">
+        <div>
+          <label>1. Phase du virage concernée</label>
+          <select id="diagPhase" onchange="runDiagnostic()">
+            <option value="entry">Entrée de virage (Freinage / Mise en appui)</option>
+            <option value="mid">Milieu de virage (Point de corde)</option>
+            <option value="exit">Sortie de virage (Réaccélération)</option>
+            <option value="all">Comportement général (Piste froide / gommée / pluie)</option>
+          </select>
+        </div>
+        <div>
+          <label>2. Symptôme observé par votre fils</label>
+          <select id="diagSymptom" onchange="runDiagnostic()">
+            <option value="understeer">Sous-virage (Le kart tire tout droit / l'avant glisse)</option>
+            <option value="oversteer">Survirage (L'arrière décroche / glisse)</option>
+            <option value="hopping">Sautillement / "Binding" (L'arrière broute, la roue int. retombe)</option>
+            <option value="no_grip_cold">Manque de grip général (Piste froide / verte / début de course)</option>
+            <option value="heavy_steering">Direction trop lourde / fatigante pour le pilote</option>
+          </select>
+        </div>
+      </div>
+      <div id="diagResult" style="margin-top:1.2rem;"></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: TABLEAU OFFICIEL OTK -->
+  <div id="tab-tableau" class="tab">
+    <div class="card">
+      <h2>📊 Tableau de Référence : Symptômes, Pièces OTK & Sens de Réglage</h2>
+      <p style="color:var(--otk-muted); font-size:0.9rem;">Synthèse fidèle au <em>OTK Chassis Set-Up Guide</em> adaptée aux cotes et arbres Mini 60 (U, N, O, H, A).</p>
+      
+      <div class="filter-bar no-print">
+        <button class="filter-btn active" onclick="filterTable('all', this)">Tout afficher</button>
+        <button class="filter-btn" onclick="filterTable('sous-virage', this)">Sous-virage (Avant glisse)</button>
+        <button class="filter-btn" onclick="filterTable('survirage', this)">Survirage (Arrière glisse)</button>
+        <button class="filter-btn" onclick="filterTable('hopping', this)">Sautillement / Trop de grip</button>
+        <button class="filter-btn" onclick="filterTable('pluie', this)">Pluie / Piste glissante</button>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table id="setupTable">
+          <thead>
+            <tr>
+              <th style="width:18%;">Symptôme & Phase</th>
+              <th style="width:22%;">Cause mécanique OTK</th>
+              <th style="width:38%;">Réglages à effectuer (par ordre de priorité)</th>
+              <th style="width:22%;">Effet secondaire à surveiller</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="sous-virage">
+              <td><span class="pill pill-warn">SOUS-VIRAGE</span><br><strong>Entrée de virage</strong><br>(Le kart refuse de tourner au braquage)</td>
+              <td>Pas assez de charge sur la roue avant intérieure pour soulever la roue arrière intérieure.</td>
+              <td>
+                1. <strong>Élargir voie AV</strong> (+1 bague intérieure par côté).<br>
+                2. <strong>Augmenter la chasse</strong> : orienter l’excentrique supérieur vers l’avant et l’inférieur vers l’arrière (ou corriger d’un demi-cran).<br>
+                3. <strong>Monter la hauteur AV</strong> (bagues intérieures sous la fusée).<br>
+                4. <strong>Élargir la voie AR</strong> (vers 1095-1100 mm) pour libérer l'arrière.
+              </td>
+              <td>Trop de chasse alourdit la direction et peut faire décrocher l'arrière au braquage.</td>
+            </tr>
+            <tr data-cat="sous-virage">
+              <td><span class="pill pill-warn">SOUS-VIRAGE</span><br><strong>Milieu de virage</strong><br>(L'avant glisse au point de corde)</td>
+              <td>Manque d'appui latéral sur le pneu avant extérieur ou châssis trop souple à l'avant.</td>
+              <td>
+                1. <strong>Durcir la barre stabilisatrice AV</strong> (ex: Ronde → Plate horizontale → Plate verticale).<br>
+                2. <strong>Augmenter le carrossage négatif</strong> : déplacer le réglage de 1 à 2 crans vers le « − ».<br>
+                3. <strong>Rétrécir légèrement la voie AV</strong> (augmente le bras de levier sur la roue ext. en milieu de virage).<br>
+                4. <strong>Baisser la hauteur AV</strong> si elle était haute.
+              </td>
+              <td>Trop de carrossage négatif rend la direction nerveuse et instable en ligne droite.</td>
+            </tr>
+            <tr data-cat="sous-virage">
+              <td><span class="pill pill-warn">SOUS-VIRAGE</span><br><strong>Sortie de virage</strong><br>(Pousse vers l'extérieur à l'accélération)</td>
+              <td>La roue arrière intérieure retombe trop tôt et pousse le train avant tout droit.</td>
+              <td>
+                1. <strong>Retirer la barre stabilisatrice AR</strong> (si montée).<br>
+                2. <strong>Élargir la voie AR</strong> (jusqu'à 1100 mm max Mini).<br>
+                3. <strong>Passer sur un arbre plus dur</strong> (ex: <strong>N → O → H</strong>) si la piste est très gommée (évite que l'arbre plie et rebondisse).<br>
+                4. <strong>Moyeux AR plus courts</strong>.
+              </td>
+              <td>Le manuel OTK précise que sur piste très gommée, un arbre trop souple plie trop et fait retomber la roue intérieure.</td>
+            </tr>
+            <tr data-cat="survirage">
+              <td><span class="pill pill-danger">SURVIRAGE</span><br><strong>Entrée de virage</strong><br>(L'arrière décroche au freinage/braquage)</td>
+              <td>Transfert de charge trop brutal sur l'avant, la roue arrière intérieure lève trop vite.</td>
+              <td>
+                1. <strong>Diminuer la chasse</strong> : orienter l’excentrique supérieur vers l’arrière et l’inférieur vers l’avant (ou corriger d’un demi-cran).<br>
+                2. <strong>Rétrécir la voie AV</strong>.<br>
+                3. <strong>Baisser la hauteur AV</strong>.<br>
+                4. <strong>Rétrécir la voie AR</strong> (vers 1070-1080 mm) pour augmenter le grip latéral AR.
+              </td>
+              <td>Une voie arrière très étroite augmente le grip latéral mais rend la glisse plus brutale si elle survient.</td>
+            </tr>
+            <tr data-cat="survirage">
+              <td><span class="pill pill-danger">SURVIRAGE</span><br><strong>Milieu & Sortie</strong><br>(Manque de motricité à l'accélération)</td>
+              <td>Train arrière trop libre ou train avant trop incisif qui fait pivoter l'arrière.</td>
+              <td>
+                1. <strong>Assouplir ou retirer la barre stabilisatrice AV</strong> (solution n°1 du manuel OTK).<br>
+                2. <strong>Diminuer le carrossage négatif</strong> : revenir vers neutre, puis vers le « + » si nécessaire (1 à 2 crans).<br>
+                3. <strong>Rétrécir la voie AR</strong> + <strong>Moyeux AR plus longs</strong>.<br>
+                4. <strong>Ajouter un raidisseur de baquet</strong> par côté ou <strong>baisser l'arrière du châssis</strong> (arbre en position haute).<br>
+                5. <strong>Arbre plus souple (N → U)</strong> si piste froide/pilote léger, ou <strong>plus dur (O/H)</strong> sur piste glissante chaude (selon manuel OTK §2a).
+              </td>
+              <td>Attention : sur un pilote Mini léger qui n'arrive pas à faire travailler l'arbre, l'arbre souple <strong>U</strong> donne du grip plus vite.</td>
+            </tr>
+            <tr data-cat="hopping">
+              <td><span class="pill pill-info">SAUTILLEMENT / BINDING</span><br><strong>Piste très gommée</strong><br>(L'arrière broute et perd de la vitesse)</td>
+              <td>Trop de grip latéral : le châssis se bloque et la roue arrière intérieure rebondit sur la piste.</td>
+              <td>
+                1. <strong>Élargir la voie AR</strong> au maximum autorisé (1100 mm).<br>
+                2. <strong>Passer sur un arbre plus dur</strong> (<strong>N → O → H → A</strong>) pour empêcher la flexion excessive.<br>
+                3. <strong>Moyeux AR courts</strong> + <strong>Jantes MXC</strong> (gardent les pneus plus frais).<br>
+                4. <strong>Retirer la barre AR</strong> et/ou un raidisseur de baquet.<br>
+                5. <strong>Baisser la pression des pneus</strong> à froid (-0.05 à -0.10 bar).
+              </td>
+              <td>Configuration typique des finales l'après-midi par forte chaleur sur piste gommée.</td>
+            </tr>
+            <tr data-cat="pluie">
+              <td><span class="pill pill-info">PLUIE / PISTE FROIDE</span><br><strong>Manque de grip global</strong><br>(Le kart glisse des 4 roues)</td>
+              <td>Pneus froids et manque de transfert de masse pour charger les pneus.</td>
+              <td>
+                1. <strong>Élargir au maximum l'AV</strong> + <strong>5 à 8 mm d'ouverture</strong>.<br>
+                2. <strong>Augmenter la chasse</strong> : supérieur vers l’avant / inférieur vers l’arrière ; <strong>augmenter le carrossage négatif</strong> d’un cran.<br>
+                3. <strong>Monter barre AV Gold/Brown</strong>.<br>
+                4. <strong>Rétrécir au maximum la voie AR</strong> (ex: 1050-1060 mm en Mini).<br>
+                5. <strong>Arbre souple Type U</strong> + <strong>Jantes Aluminium AXP</strong> + monter le lest plus haut sur le dos du baquet.
+              </td>
+              <td>Pensez à augmenter la pression des pneus pluie (souvent autour de 1.10 à 1.30 bar selon manufacturier).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: REFERENTIEL MANUEL OTK -->
+  <div id="tab-ref" class="tab">
+    <div class="grid-2">
+      <div class="card">
+        <h3>1. Échelle des Arbres Arrière OTK (Manuel §2a + Mini 60)</h3>
+        <div class="alert-box alert-warn">
+          <strong>Subtilité du Manuel OTK à bien comprendre :</strong><br>
+          • <strong>Arbre souple (U) :</strong> Donne du grip <em>rapidement</em> (idéal pluie, froid, manches courtes, ou pilote Mini léger qui manque de levier sur l'arbre). Sur piste très gommée, il plie trop, rebondit et bloque le kart.<br>
+          • <strong>Arbre standard (N) :</strong> Référence polyvalente OTK, garde le kart libre sur la durée et sur piste gommée.<br>
+          • <strong>Arbres durs (O → H → A) :</strong> Libèrent le châssis quand le grip est très élevé (évitent le rebond), ou augmentent l'appui sur piste glissante une fois les pneus en température.
+        </div>
+        <table>
+          <thead><tr><th>Code Arbre</th><th>Dureté</th><th>Usage recommandé en Mini 60 (Ø30 × 950mm)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Type U</strong></td><td>Souple</td><td>Pluie, piste froide/verte, pilote très léger</td></tr>
+            <tr><td><strong>Type N</strong></td><td>Medium (Standard)</td><td><strong>Référence usine OTK</strong> — Sec, majorité des pistes</td></tr>
+            <tr><td><strong>Type O</strong></td><td>Medium-Dur</td><td>Piste chaude / gommée, libère l'arrière en sortie</td></tr>
+            <tr><td><strong>Type H</strong></td><td>Dur</td><td>Forte chaleur, piste très gommée / sautillement</td></tr>
+            <tr><td><strong>Type A</strong></td><td>Extra-Dur</td><td>Conditions extrêmes de grip / asphalte très abrasif</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>2. Jantes OTK (Manuel §4) & Colonne de Direction (§3f)</h3>
+        <table>
+          <thead><tr><th>Modèle Jante</th><th>Matière</th><th>Comportement selon le Manuel OTK</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MXP</strong></td><td>Magnésium (Standard)</td><td>Livrée d'origine. Légèrement plus souple que la MXC, polyvalente.</td></tr>
+            <tr><td><strong>MXC</strong></td><td>Magnésium (Dure)</td><td>Garde le pneu plus frais sur les longues courses. Idéale par fort grip pour garder le châssis libre.</td></tr>
+            <tr><td><strong>AXP</strong></td><td>Aluminium</td><td>Plus rigide et lourde : fait chauffer le pneu très vite (idéale pluie ou pistes froides, risque de surchauffe sur le sec long).</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:1rem;">
+          <strong>Réglage colonne de direction (§3f) :</strong>
+          <ul style="margin:0.4rem 0; padding-left:1.2rem; font-size:0.9rem;">
+            <li><strong>Trous proches de la colonne :</strong> Allège l'effort au volant (recommandé en Mini 60 si vous ajoutez de la chasse) et rend la direction plus progressive.</li>
+            <li><strong>Trous éloignés :</strong> Direction plus directe/vive mais plus lourde physiquement.</li>
+            <li><strong>Moyeu de volant incliné :</strong> Recommandé par OTK pour les jeunes/petits pilotes afin d'avoir le volant plus vertical et confortable.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>3. Montage Baquet & Répartition du Lest (Manuel §1 & §5)</h3>
+        <ul style="margin:0; padding-left:1.2rem; font-size:0.9rem;">
+          <li><strong>Hauteur du baquet :</strong> Standard à ~10 mm sous le tube inférieur. Pour les petits gabarits (Mini), OTK conseille de le remonter au niveau du haut du tube (+30 à 40 mm) pour augmenter le levier sur le châssis, ou d'utiliser un pédalier réglable.</li>
+          <li><strong>Avancer le baquet (+10 à 20 mm) :</strong> Donne plus de grip sur le train avant.</li>
+          <li><strong>Reculer le baquet (+10 à 20 mm) :</strong> Donne plus de motricité et de grip arrière (utile avec des pneus durs).</li>
+          <li><strong>Raidisseurs de baquet :</strong> 1 par côté en standard. En ajouter augmente le transfert de charge sur la roue arrière ; les retirer libère l'arrière.</li>
+          <li><strong>Placement des plombs (Lest) :</strong> Prioritairement sous le baquet, derrière le baquet et sur le côté gauche (opposé au moteur). Par faible grip / pluie, fixer les plombs plus haut sur le dossier du baquet.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>4. Réglages Sec vs Pluie — Tableau Officiel OTK (§7)</h3>
+        <table>
+          <thead><tr><th>Paramètre</th><th>Réglage Standard SEC</th><th>Réglage Standard PLUIE</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Largeur Avant</strong></td><td>1 bague intérieure</td><td>Toutes bagues / Moyeux longs</td></tr>
+            <tr><td><strong>Hauteur Avant</strong></td><td>Milieu (1 haut / 1 bas)</td><td>Milieu (ou Haute si besoin d'entrée)</td></tr>
+            <tr><td><strong>Barre Avant</strong></td><td>Plate — Horizontale</td><td>Ronde Gold / Brown</td></tr>
+            <tr><td><strong>Ouverture (Toe)</strong></td><td>1 à 2 mm ouverture</td><td>5 à 8 mm ouverture (4 mm/côté)</td></tr>
+            <tr><td><strong>Carrossage</strong></td><td>Neutre (2 flèches AV)</td><td>−1 cran Négatif</td></tr>
+            <tr><td><strong>Chasse</strong></td><td>Neutre (2 flèches AV)</td><td>Augmentée (haut AV / bas AR)</td></tr>
+            <tr><td><strong>Largeur Arrière</strong></td><td>1090 – 1100 mm (Mini)</td><td>1050 – 1065 mm (Mini)</td></tr>
+            <tr><td><strong>Barre Arrière</strong></td><td>Aucune (retirée)</td><td>Aucune (retirée)</td></tr>
+            <tr><td><strong>Jantes</strong></td><td>MXP Magnésium</td><td>AXP Aluminium</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB SNIPER V2 -->
+  <div id="tab-sniper" class="tab">
+    <div class="card">
+      <h2>🎯 Sniper V2 Inox — Comprendre le carrossage</h2>
+      <div class="alert-box alert-warn">
+        <strong>Lecture officielle du Sniper V2 :</strong><br>
+        • 1 ligne complète = 2 mm de carrossage par côté.<br>
+        • Le point intermédiaire = 1 mm par côté.<br>
+        • Lire chaque laser sur la grille opposée. Additionner les valeurs gauche et droite pour obtenir le total du train avant.<br>
+        • Le parallélisme se lit sur l'axe perpendiculaire.
+      </div>
+      <p>Le Sniper affiche un déplacement en millimètres, pas directement un angle. Pour convertir en degrés, il faut connaître le diamètre de référence sur lequel le déplacement est défini. Sur cette page, le calcul est présenté comme un écart haut/bas rapporté au diamètre de la jante : <strong>angle = arctan(mm / diamètre)</strong>.</p>
+      <div class="grid-2">
+        <div>
+          <label for="sniperRimDiameter">Diamètre de référence de la jante (mm)</label>
+          <input type="number" id="sniperRimDiameter" min="50" max="300" step="0.1" value="127" oninput="updateSniperTable()">
+          <small>127 mm correspond au diamètre nominal de portée 5 pouces, pas nécessairement au diamètre extérieur réel de la jante. Mesure la dimension correspondant à la référence de carrossage pour affiner.</small>
+        </div>
+        <div>
+          <label>Type de pneu monté</label>
+          <input type="text" value="Vega Cadetti avant · 10 × 4.00-5" readonly>
+          <small>Le diamètre extérieur du pneu (environ 252 mm selon la fiche Vega) n'est pas utilisé dans ce calcul provisoire.</small>
+        </div>
+      </div>
+      <h3>Correspondance millimètres → degrés</h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Lecture</th><th>Déplacement par côté</th><th>Angle par côté</th><th>Total si les 2 côtés identiques</th></tr></thead>
+          <tbody id="sniperConversionRows"></tbody>
+        </table>
+      </div>
+      <div class="alert-box alert-info" style="margin-top:1rem">
+        <strong>Important — calibration à confirmer :</strong> la notice confirme les 2 mm par ligne et 1 mm par point, mais ne donne pas une conversion universelle en degrés. Le diamètre de 127 mm est une base nominale de jante 5 pouces. Avant d'utiliser ces degrés pour déduire la position neutre des excentriques OTK, il faut confirmer le diamètre de référence réellement utilisé par la mesure du Sniper. Le tableau se recalcule automatiquement si tu modifies le diamètre.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: FICHES SAUVEGARDEES -->
+  <div id="tab-saved" class="tab">
+    <div class="card">
+      <h2>💾 Historique de vos Fiches Setup OTK Mini 60</h2>
+      <div id="savedList"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const STORAGE_KEY = 'otk_mini60_setups_v4';
+const ECCENTRIC_POSITIONS = 20;
+const ECCENTRIC_RADIUS_MM = 2;
+const PIVOT_SPACING_MM = 60;
+// Neutre V13 : les deux Pills (supérieur et inférieur) ont le même index initial : position 1, flèches vers l’avant.
+const ECCENTRIC_NEUTRAL = { top: 0, bottom: 0 };
+const eccentricState = { ...ECCENTRIC_NEUTRAL };
+function arrowAngle(position) {
+  return -Math.PI / 2 + (position % ECCENTRIC_POSITIONS) * 2 * Math.PI / ECCENTRIC_POSITIONS;
+}
+// Coordonnées locales : longitudinal positif = arrière ; transversal positif = droite.
+// Le pivot est à l'opposé de la flèche gravée.
+function pivotOffset(position) {
+  const a = arrowAngle(position) + Math.PI;
+  return {
+    lateral: ECCENTRIC_RADIUS_MM * Math.cos(a),
+    longitudinal: ECCENTRIC_RADIUS_MM * Math.sin(a)
+  };
+}
+function fmtMm(v) { return `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2).replace('.', ',')} mm`; }
+function fmtDeg(v) { return `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2).replace('.', ',')}°`; }
+function updateEccentricClassification() {
+  const neutralTop = pivotOffset(ECCENTRIC_NEUTRAL.top);
+  const neutralBottom = pivotOffset(ECCENTRIC_NEUTRAL.bottom);
+  const top = pivotOffset(eccentricState.top);
+  const bottom = pivotOffset(eccentricState.bottom);
+  const dTop = { longitudinal: top.longitudinal-neutralTop.longitudinal, lateral: top.lateral-neutralTop.lateral };
+  const dBottom = { longitudinal: bottom.longitudinal-neutralBottom.longitudinal, lateral: bottom.lateral-neutralBottom.lateral };
+  // Inclinaison supplémentaire de l'axe = différence des déplacements des deux pivots.
+  const dLong = dTop.longitudinal - dBottom.longitudinal;
+  const dLat = dTop.lateral - dBottom.lateral;
+  const caster = Math.atan(dLong / PIVOT_SPACING_MM) * 180 / Math.PI;
+  const camber = -Math.atan(dLat / PIVOT_SPACING_MM) * 180 / Math.PI;
+  const c = document.getElementById('casterQual');
+  const m = document.getElementById('camberQual');
+  const summary = document.getElementById('eccentricSummary');
+  if (c) c.textContent = fmtDeg(caster);
+  if (m) m.textContent = fmtDeg(camber);
+  const cm = document.getElementById('casterMm'); if (cm) cm.textContent = `${fmtMm(dLong)} · cumul des 2 pivots`;
+  const mm = document.getElementById('camberMm'); if (mm) mm.textContent = `${fmtMm(dLat)} · cumul des 2 pivots`;
+  const ta = document.getElementById('topAngle');
+  const ba = document.getElementById('bottomAngle');
+  if (ta) ta.textContent = `${fmtMm(dTop.longitudinal)} / ${fmtMm(dTop.lateral)}`;
+  if (ba) ba.textContent = `${fmtMm(dBottom.longitudinal)} / ${fmtMm(dBottom.lateral)}`;
+  const neutral = eccentricState.top === ECCENTRIC_NEUTRAL.top && eccentricState.bottom === ECCENTRIC_NEUTRAL.bottom;
+  if (summary) summary.textContent = neutral ? 'Position neutre de référence : Δ chasse 0,00° / Δ carrossage 0,00°' : `Cumul des deux excentriques : Δ chasse ${fmtDeg(caster)} / Δ carrossage ${fmtDeg(camber)}`;
+}
+function setEccentricPositions(top, bottom) {
+  eccentricState.top = ((Number(top) || 0) % ECCENTRIC_POSITIONS + ECCENTRIC_POSITIONS) % ECCENTRIC_POSITIONS;
+  eccentricState.bottom = ((Number(bottom) || 0) % ECCENTRIC_POSITIONS + ECCENTRIC_POSITIONS) % ECCENTRIC_POSITIONS;
+  document.getElementById('caster').value = String(eccentricState.top);
+  document.getElementById('camber').value = String(eccentricState.bottom);
+  renderEccentrics();
+  updateEccentricClassification();
+}
+function rotateEccentric(which, delta) {
+  // Réglage individuel d'un Pill pour explorer toutes les combinaisons haut/bas.
+  const next = { ...eccentricState, [which]: eccentricState[which] + delta };
+  setEccentricPositions(next.top, next.bottom);
+}
+function rotateEccentricPair(delta) {
+  // Commande jumelée : rotation symétrique et opposée des deux Pills.
+  setEccentricPositions(eccentricState.top + delta, eccentricState.bottom - delta);
+}
+function renderEccentricPair(which) {
+  const selected = eccentricState[which];
+  const washer = (cx, cy, mirrored) => {
+    let holes='';
+    for(let i=0;i<ECCENTRIC_POSITIONS;i++){
+      const a=i*2*Math.PI/ECCENTRIC_POSITIONS;
+      holes+=`<circle cx="${(cx+35*Math.cos(a)).toFixed(1)}" cy="${(cy+35*Math.sin(a)).toFixed(1)}" r="2.7" fill="#172235" stroke="#94a3b8" stroke-width="1"/>`;
+    }
+    const baseAngle = arrowAngle(selected);
+    // Même orientation de flèche au départ (12 h) des deux côtés.
+    // Le miroir inverse uniquement le sens d'évolution quand l'index change.
+    const angle = mirrored ? (-Math.PI - baseAngle) : baseAngle;
+    const dx=Math.cos(angle), dy=Math.sin(angle);
+    const ax=cx+30*dx, ay=cy+30*dy;
+    const arrow=`<line x1="${cx+20*dx}" y1="${cy+20*dy}" x2="${ax}" y2="${ay}" stroke="#facc15" stroke-width="2.8" stroke-linecap="round"/><polygon points="${ax},${ay} ${ax-7*dx+4*dy},${ay-7*dy-4*dx} ${ax-7*dx-4*dy},${ay-7*dy+4*dx}" fill="#facc15"/>`;
+    const hx=cx-11*dx, hy=cy-11*dy;
+    const pivot=`<circle cx="${hx}" cy="${hy}" r="7.5" fill="#0f172a" stroke="#e2e8f0" stroke-width="2"/><circle cx="${hx}" cy="${hy}" r="2.2" fill="#94a3b8"/>`;
+    return `<circle cx="${cx}" cy="${cy}" r="43" fill="#cbd5d1" stroke="#64748b" stroke-width="2.2"/><circle cx="${cx}" cy="${cy}" r="25" fill="#64748b" stroke="#e2e8f0" stroke-width="2"/>${holes}${arrow}${pivot}`;
+  };
+  const label = which === 'top' ? 'supérieur' : 'inférieur';
+  return `<svg viewBox="0 0 360 112" role="img" aria-label="Deux excentriques ${label}s : même position standard ${selected+1} sur ${ECCENTRIC_POSITIONS}, montage gauche/droite en miroir, flèches alignées à 12 h au neutre">
+    <text x="90" y="12" text-anchor="middle" font-size="9" fill="#cbd5e1">GAUCHE · + HORAIRE</text>
+    <text x="270" y="12" text-anchor="middle" font-size="9" fill="#cbd5e1">DROIT · + ANTIHORAIRE</text>
+    ${washer(90,61,false)}${washer(270,61,true)}
+  </svg>`;
+}
+function renderEccentrics() {
+  ['top','bottom'].forEach(which => {
+    const host = document.getElementById(which === 'top' ? 'eccentricTopGraphic' : 'eccentricBottomGraphic');
+    if (!host) return;
+    host.innerHTML = renderEccentricPair(which);
+    const neutralPos = ECCENTRIC_NEUTRAL[which];
+    const offset = (eccentricState[which] - neutralPos + ECCENTRIC_POSITIONS) % ECCENTRIC_POSITIONS;
+    document.getElementById(which === 'top' ? 'eccentricTopValue' : 'eccentricBottomValue').textContent = `${eccentricState[which]+1} / 20 (Δ ${offset > 10 ? offset-20 : offset} trous)`;
+  });
+}
+
+function updateSniperTable() {
+  const input = document.getElementById('sniperRimDiameter');
+  const diameter = Number(input && input.value);
+  const body = document.getElementById('sniperConversionRows');
+  if (!body) return;
+  if (!Number.isFinite(diameter) || diameter <= 0) { body.innerHTML = '<tr><td colspan="4">Saisir un diamètre valide.</td></tr>'; return; }
+  body.innerHTML = Array.from({length: 7}, (_, i) => {
+    const mm = i;
+    const deg = Math.atan(mm / diameter) * 180 / Math.PI;
+    const total = 2 * deg;
+    const label = mm === 0 ? 'Centre' : (mm % 2 === 0 ? `${mm/2} graduation${mm===2?'':'s'}` : `${mm} point${mm===1?'':'s'}`);
+    return `<tr><td>${label}</td><td>${mm} mm</td><td>${deg.toFixed(3)}°</td><td>${total.toFixed(3)}°</td></tr>`;
+  }).join('');
+}
+
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function loadDryBase() {
+  document.getElementById('trackGrip').value = 'medium';
+  document.getElementById('frontWidth').value = '1';
+  document.getElementById('frontHubs').value = 'Standard Mini (65mm)';
+  document.getElementById('frontHeight').value = 'Standard / Milieu (1 haut / 1 bas)';
+  document.getElementById('frontBar').value = 'Plate Horizontale (Standard OTK)';
+  setEccentricPositions(ECCENTRIC_NEUTRAL.top, ECCENTRIC_NEUTRAL.bottom);
+  document.getElementById('toe').value = '1 à 2 mm ouverture (Standard Sec)';
+  document.getElementById('rearAxle').value = 'Type N (Medium Standard OTK)';
+  document.getElementById('rearWidth').value = '1090 mm';
+  document.getElementById('rearHubs').value = 'Standard Magnésium';
+  document.getElementById('rearHeight').value = 'Standard Milieu';
+  document.getElementById('rearBar').value = 'Sans barre AR (Standard OTK)';
+  document.getElementById('seatStays').value = '1 raidisseur de chaque côté (Standard OTK)';
+  document.getElementById('wheels').value = 'MXP Magnésium (Standard Sec)';
+  alert('Réglage de base SEC officiel OTK chargé.');
+}
+
+function loadWetBase() {
+  document.getElementById('trackGrip').value = 'wet';
+  document.getElementById('frontWidth').value = '2';
+  document.getElementById('frontHubs').value = 'Longs (75/80mm)';
+  document.getElementById('frontHeight').value = 'Standard / Milieu (1 haut / 1 bas)';
+  document.getElementById('frontBar').value = 'Ronde Gold/Brown (Dure / Pluie)';
+  setEccentricPositions(ECCENTRIC_NEUTRAL.top, ECCENTRIC_NEUTRAL.bottom);
+  document.getElementById('toe').value = '5 à 8 mm ouverture (Pluie OTK)';
+  document.getElementById('rearAxle').value = 'Type U (Souple - Pluie / Froid / Léger)';
+  document.getElementById('rearWidth').value = '1060 mm';
+  document.getElementById('rearHubs').value = 'Standard Magnésium';
+  document.getElementById('rearHeight').value = 'Standard Milieu';
+  document.getElementById('rearBar').value = 'Sans barre AR (Standard OTK)';
+  document.getElementById('seatStays').value = '1 raidisseur de chaque côté (Standard OTK)';
+  document.getElementById('wheels').value = 'AXP Aluminium (Pluie / Chauffe rapide)';
+  alert('Réglage de base PLUIE officiel OTK chargé.');
+}
+
+async function fetchWeather() {
+  const city = document.getElementById('weatherCity').value.trim() || document.getElementById('trackName').value.trim();
+  if (!city) { alert('Indiquez le nom du circuit ou de la ville.'); return; }
+  try {
+    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=fr&format=json`);
+    const geo = await geoRes.json();
+    if (!geo.results || !geo.results.length) { alert('Ville non trouvée.'); return; }
+    const { latitude, longitude, name } = geo.results[0];
+    const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,surface_pressure,weather_code`);
+    const w = await wRes.json();
+    const cur = w.current;
+    document.getElementById('tempAir').value = cur.temperature_2m;
+    document.getElementById('humidityPress').value = `${cur.relative_humidity_2m}% / ${Math.round(cur.surface_pressure)} hPa`;
+    const codes = {0:'Ciel dégagé',1:'Peu nuageux',2:'Partiellement nuageux',3:'Couvert',45:'Brouillard',51:'Bruine',61:'Pluie faible',63:'Pluie modérée',65:'Forte pluie',80:'Averses'};
+    document.getElementById('weatherDesc').value = `${codes[cur.weather_code] || 'Variable'} (${name})`;
+  } catch (e) {
+    alert('Impossible de récupérer la météo en ligne (vérifiez la connexion internet).');
+  }
+}
+
+function runDiagnostic() {
+  const phase = document.getElementById('diagPhase').value;
+  const sym = document.getElementById('diagSymptom').value;
+  const box = document.getElementById('diagResult');
+  let title = '', steps = [], warn = '';
+
+  if (sym === 'understeer' && phase === 'entry') {
+    title = 'Sous-virage en ENTRÉE de virage (Manuel OTK §3a, §3c, §3e)';
+    steps = [
+      '1. Élargir la voie avant (+1 bague intérieure par côté) pour augmenter le levier sur la roue avant intérieure.',
+      '2. Ajuster la chasse avec les deux Pills en rotations opposées et symétriques ; contrôler le delta calculé et valider au banc.',
+      '3. Monter la hauteur avant (placer les 2 bagues intérieures sous la fusée).',
+      '4. Vérifier que le tube avant ne frotte pas au sol sur les bosses (test du scotch sous le châssis).'
+    ];
+    warn = 'Si la direction devient trop lourde pour votre fils, déplacez les biellettes sur les trous les plus proches de la colonne de direction.';
+  } else if (sym === 'understeer' && phase === 'mid') {
+    title = 'Sous-virage en MILIEU de virage (Manuel OTK §3a, §3d, §3g)';
+    steps = [
+      '1. Durcir la barre stabilisatrice avant (passer de Ronde à Plate horizontale, ou de Plate horizontale à Verticale).',
+      '2. Augmenter le carrossage négatif : déplacer le réglage de 1 à 2 crans vers le « − ».',
+      '3. Rétrécir légèrement la voie avant (augmente l’appui sur le pneu avant extérieur en appui).',
+      '4. Baisser la hauteur de châssis avant si elle était en position haute.'
+    ];
+    warn = 'Trop de carrossage négatif rend le train avant très nerveux et instable.';
+  } else if (sym === 'understeer' && phase === 'exit') {
+    title = 'Sous-virage en SORTIE de virage (Manuel OTK §2a, §2d, §2e)';
+    steps = [
+      '1. Retirer la barre stabilisatrice arrière si elle est montée.',
+      '2. Élargir la voie arrière (vers 1095 - 1100 mm max en Mini 60) pour libérer le train arrière.',
+      '3. Si la piste est très gommée, passer sur un arbre plus dur (N → O → H) pour éviter que l’arbre plie et fasse retomber la roue intérieure.',
+      '4. Monter des moyeux arrière plus courts.'
+    ];
+    warn = 'Vérifiez aussi que la pression des pneus ne monte pas trop haut en fin de manche.';
+  } else if (sym === 'oversteer' && phase === 'entry') {
+    title = 'Survirage en ENTRÉE de virage (Manuel OTK §3a, §3e, §2d)';
+    steps = [
+      '1. Réduire la chasse (flèche haut vers l’arrière, flèche bas vers l’avant, ou demi-cran avec bague concentrique).',
+      '2. Rétrécir la voie avant.',
+      '3. Baisser la hauteur du train avant (bagues intérieures au-dessus de la fusée).',
+      '4. Rétrécir légèrement la voie arrière pour donner plus de grip latéral.'
+    ];
+    warn = 'Sur un châssis Mini, un excès de chasse fait lever la roue arrière intérieure trop brusquement au braquage.';
+  } else if (sym === 'oversteer') {
+    title = 'Survirage en MILIEU / SORTIE de virage (Manuel OTK §3g, §3d, §2c, §1b)';
+    steps = [
+      '1. Assouplir ou retirer complètement la barre stabilisatrice avant (réglage n°1 recommandé par OTK).',
+      '2. Diminuer le carrossage négatif : revenir vers neutre, puis vers le « + » si nécessaire (1 à 2 crans).',
+      '3. Rétrécir la voie arrière + ajouter 1 raidisseur de baquet par côté.',
+      '4. Baisser l’arrière du châssis (placer l’arbre dans les paliers du haut) pour plaquer la motricité.',
+      '5. Si le pilote est léger / piste froide : passer à l’arbre souple Type U. Si piste glissante mais chaude : tester arbre O ou H.'
+    ];
+    warn = 'Sans barre avant sur une course longue, surveillez l’usure des pneus avant.';
+  } else if (sym === 'hopping') {
+    title = 'Sautillement / "Binding" sur piste gommée (Manuel OTK §2a, §2b, §4)';
+    steps = [
+      '1. Élargir la voie arrière au maximum réglementaire (1100 mm en Mini 60).',
+      '2. Passer sur un arbre plus dur : N → O → H → A (empêche l’arbre de plier et rebondir).',
+      '3. Monter des moyeux arrière courts et des jantes magnésium MXC (gardent le pneu plus frais).',
+      '4. Retirer la barre arrière et/ou un raidisseur de baquet.',
+      '5. Baisser les pressions à froid de 0.05 à 0.10 bar.'
+    ];
+    warn = 'Ne jamais mettre d’arbre souple (U) quand le kart sautille sur piste gommée : cela aggrave le phénomène.';
+  } else {
+    title = 'Manque de grip général / Direction lourde (Manuel OTK §1, §2a, §3f, §5)';
+    steps = [
+      '• Si piste froide / début de manche : monter l’arbre souple Type U, des jantes Aluminium AXP, rétrécir la voie arrière (1065-1075 mm) et monter le lest plus haut derrière le baquet.',
+      '• Si le pilote est petit/léger : remonter le baquet au niveau du haut du tube (+30/40 mm) pour augmenter son effet de levier.',
+      '• Si la direction est trop lourde : déplacer les biellettes sur les trous les plus proches de la colonne de direction et/ou réduire la chasse.'
+    ];
+    warn = 'Un pilote fatigué des bras perd en régularité : privilégiez le confort de direction en Mini 60.';
+  }
+
+  box.innerHTML = `
+    <div class="card" style="background:#0f172a; border-color:var(--otk-green);">
+      <h3 style="color:var(--otk-accent);">${title}</h3>
+      <ul style="padding-left:1.2rem; margin:0.5rem 0;">
+        ${steps.map(s => `<li style="margin-bottom:0.4rem;">${s}</li>`).join('')}
+      </ul>
+      <div class="alert-box alert-warn" style="margin-top:0.8rem; margin-bottom:0;">⚠️ ${warn}</div>
+    </div>
+  `;
+}
+
+function getFormData() {
+  const ids = ['trackName','sessionName','trackGrip','setupDate','setupTime','weatherCity','tempAir','humidityPress','weatherDesc',
+               'frontWidth','frontHubs','frontHeight','frontBar','caster','camber','toe','steeringCol',
+               'rearAxle','rearWidth','rearHubs','rearHeight','rearBar','seatStays',
+               'wheels','tyreCold','tyreHotLap','seatBallast','gearing','carbSetup','notes'];
+  const data = { id: Date.now() };
+  ids.forEach(id => data[id] = document.getElementById(id).value);
+  data.date = data.setupDate ? new Date(`${data.setupDate}T00:00:00`).toLocaleDateString('fr-FR') : '';
+  data.time = data.setupTime || '';
+  data.eccentricTopPosition = eccentricState.top;
+  data.eccentricBottomPosition = eccentricState.bottom;
+  return data;
+}
+
+function dateToInputValue(value) {
+  if (!value) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  const fr = String(value).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (fr) return `${fr[3]}-${fr[2].padStart(2,'0')}-${fr[1].padStart(2,'0')}`;
+  return '';
+}
+
+function initializeDateTime() {
+  const now = new Date();
+  const date = document.getElementById('setupDate');
+  const time = document.getElementById('setupTime');
+  if (date && !date.value) {
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    date.value = localDate;
+  }
+  if (time && !time.value) time.value = now.toTimeString().slice(0,5);
+}
+
+function setFormData(data) {
+  Object.keys(data).forEach(k => {
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (k === 'frontWidth') {
+      const n = Number(data[k]);
+      el.value = Number.isFinite(n) ? String(n) : '1';
+    } else if (k === 'caster' || k === 'camber') {
+      // Anciennes fiches : les libellés texte ne contenaient pas la position physique des excentriques.
+      el.value = data[k];
+    } else el.value = data[k];
+  });
+  const dateInput = document.getElementById('setupDate');
+  const timeInput = document.getElementById('setupTime');
+  if (dateInput) dateInput.value = dateToInputValue(data.setupDate || data.date) || dateInput.value;
+  if (timeInput && data.setupTime) timeInput.value = data.setupTime;
+  const topValue = data.eccentricTopPosition ?? data.caster;
+  const bottomValue = data.eccentricBottomPosition ?? data.camber;
+  const top = Number.isInteger(Number(topValue)) ? Number(topValue) : 0;
+  const bottom = Number.isInteger(Number(bottomValue)) ? Number(bottomValue) : 0;
+  setEccentricPositions(top, bottom);
+}
+
+function saveSetup() {
+  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const data = getFormData();
+  if (!data.trackName) data.trackName = 'Circuit sans nom';
+  list.unshift(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  renderSaved();
+  alert('Fiche enregistrée avec succès !');
+}
+
+function deleteSetup(id) {
+  let list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  list = list.filter(item => item.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  renderSaved();
+}
+
+function loadSetupById(id) {
+  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const item = list.find(i => i.id === id);
+  if (item) {
+    setFormData(item);
+    switchTab('tab-fiche', document.querySelector('nav button'));
+  }
+}
+
+function renderSaved() {
+  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  document.getElementById('saved-count').textContent = list.length;
+  const container = document.getElementById('savedList');
+  if (!list.length) {
+    container.innerHTML = '<p style="color:var(--otk-muted);">Aucune fiche sauvegardée pour le moment.</p>';
+    return;
+  }
+  container.innerHTML = list.map(s => `
+    <div class="setup-item">
+      <div>
+        <strong>${s.trackName}</strong> — <span style="color:var(--otk-accent);">${s.sessionName || 'Session'}</span> (${s.date || ''}${s.time ? ' · ' + s.time : ''})<br>
+        <span style="font-size:0.82rem; color:var(--otk-muted);">
+          Météo: ${s.tempAir ? s.tempAir+'°C' : 'N/A'} | Excentriques H/B: ${(Number(s.eccentricTopPosition ?? s.caster ?? 0)+1)}/20 – ${(Number(s.eccentricBottomPosition ?? s.camber ?? 0)+1)}/20 | Arbre: <strong>${s.rearAxle.split(' ')[1] || s.rearAxle}</strong> | Voie AR: ${s.rearWidth} | Barre AV: ${s.frontBar}
+        </span>
+      </div>
+      <div style="display:flex; gap:0.4rem;">
+        <button class="btn btn-secondary" onclick="loadSetupById(${s.id})">Charger</button>
+        <button class="btn btn-danger" onclick="deleteSetup(${s.id})">Suppr.</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterTable(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#setupTable tbody tr').forEach(tr => {
+    tr.style.display = (cat === 'all' || tr.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+function exportJSON() {
+  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'otk-mini60-setups.json';
+  a.click();
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (Array.isArray(imported)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
+        renderSaved();
+        alert('Fiches importées avec succès !');
+      }
+    } catch { alert('Fichier JSON invalide.'); }
+  };
+  reader.readAsText(file);
+}
+
+initializeDateTime();
+runDiagnostic();
+setEccentricPositions(ECCENTRIC_NEUTRAL.top, ECCENTRIC_NEUTRAL.bottom);
+renderSaved();
+document.addEventListener("DOMContentLoaded", updateSniperTable);
+</script>
+</body>
+</html>
